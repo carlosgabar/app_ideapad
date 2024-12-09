@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sistema de Gestion de Cursos</title>
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/styles_login.css">
+  <link rel="stylesheet" href="/static/styles_menu.css">
+  
+  <style>
+    .formularios {
+      display: none;
+    }
+  </style>
+  <script>
+  function mostrarFormulario(formulario) {
+    var formularios = document.getElementsByClassName("formularios");
+    for (var i = 0; i < formularios.length; i++) {
+      formularios[i].style.display = "none";
+    }
+    
+    document.getElementById(formulario).style.display = "block";
+  }
+  </script>
+  
+</head>
+<body>
+
+    <div class="barra-nav">
+        <nav class="navbar" style="background-color: #e3f2fd;">
+        <nav class="navbar navbar-expand navbar-light">
+            <ul class="nav navbar-nav ">
+                <li class="nav-item">
+                <a class="nav-link" href="/menu">Cursos</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="/cerrar_admin">Cerrar Sesion</a>
+                </li>
+                <div class="boton_admin">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login_admin">Administrador</a>
+                </li>    
+                </div>
+            </ul>
+        </nav>
+        </nav>
+    </div>
+
+    <div class="container ">
+
+        {% block content %}
+
+        {% endblock %}
+    
+    </div>
+
+    <script src="/static/js/bootstrap.min.js"></script>
+
+</body>
+</html>
+
