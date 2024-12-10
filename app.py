@@ -7,6 +7,7 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 
 app=Flask(__name__,template_folder='templates', static_folder='static')
+app.secret_key="curso"
 
 
 id=0
@@ -21,14 +22,29 @@ def conectar_bd():
 def inicio():
 
     if not 'login' in session:
-        return redirect("/login_trabajador")
+        return redirect("/login_admin")
     
-    return render_template('menu.html')
+    conectar=conectar_bd()
+    cursor=conectar.cursor()
+
+    cursor.execute('''SELECT * FROM curso''')
+    cursos=cursor.fetchall()
+    conectar.commit()
+    cursor.close()
+    conectar.close()
+
+    return render_template('menu_administrador.html',cursos=cursos)
 
 @app.route('/login_trabajador')
 def login():
 
     return render_template('login.html')
+
+
+@app.route('/login_admin')
+def loginadmin():
+
+    return render_template('login_admin.html')
 
 @app.route('/menu')
 def menu():
@@ -43,6 +59,7 @@ def menuadmin():
 
     cursor.execute('''SELECT * FROM curso''')
     cursos=cursor.fetchall()
+    print(cursos)
     conectar.commit()
     cursor.close()
     conectar.close()
@@ -51,16 +68,33 @@ def menuadmin():
     return render_template('menu_administrador.html',cursos=cursos)
 
 
-@app.route('/login_admin')
+@app.route('/login_admin',methods=['POST'])
 def admin():
 
-    return render_template('login_admin.html')
+    usuario=request.form['user']
+    clave=request.form['password']
+
+    conectar=conectar_bd()
+    cursor=conectar.cursor()
+
+    cursor.execute('''SELECT id_user,password FROM administrador WHERE id_user=%s and password=%s''',(usuario,clave))
+
+    if cursor.fetchone() is not None:
+            session["login"]=True
+            session["usuario"]="Administrador"
+            return redirect("/")
+
+    conectar.commit()
+    cursor.close()
+    conectar.close()
+
+    return render_template('login_admin.html',mensaje="Acceso Denegado")
 
 @app.route('/cerrar_admin')
 def cerrarsesion():
-
+    
     session.clear()
-    return redirect('/login.html')
+    return redirect('/login_admin')
 
 @app.route('/crear',methods=['POST'])
 def crear():
@@ -111,6 +145,7 @@ def crear():
 
     cursor.execute('''SELECT * FROM curso''')
     cursos=cursor.fetchall()
+    print(cursos)
 
     conectar.commit()
     cursor.close()
