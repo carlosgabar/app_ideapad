@@ -17,7 +17,6 @@ def conectar_bd():
     conect=get_connection()
     return conect
 
-
 @app.route('/')
 def inicio():
 
@@ -205,6 +204,24 @@ def editarid(id):
 
     return render_template('menu_administrador.html',datos=detalle,cursos=cursos)
 
+@app.route('/eliminar/<int:id>/<int:idcurso>', methods=['GET', 'POST'])
+def eliminarid(id,idcurso):
+    print(idcurso)
+    conectar=conectar_bd()
+    cursor=conectar.cursor()
+
+    cursor.execute('''SELECT * FROM curso''')
+    cursos=cursor.fetchall()
+
+    cursor.execute('''DELETE FROM curso_trabajador WHERE id_curso=%s and id_trabajador=%s''',(idcurso,id))
+
+    conectar.commit()
+    cursor.close()
+    conectar.close()
+
+    return render_template('menu_administrador.html',cursos=cursos)
+
+
 @app.route('/visualizar')
 def visualizar():
 
@@ -262,7 +279,7 @@ def visualizarpor():
         <td>{curso[10]}</td>
         <td>
                 <form action="{url_for('visualizarcurso', id=curso[0])}" method="get" style="display:inline;">
-                  <button type="submit">Editar</button>
+                  <button type="submit">Visualizar</button>
                 </form>
         </td>
         </tr> '''
@@ -285,8 +302,6 @@ def visualizarcurso(id):
                    WHERE c.id_curso=%s 
                    ''',(id,))
     inscritos=cursor.fetchone()
-
-    #LISTAR TRABAJADORES UNIDOS A UN CURSO EN ESPECIFICO
 
     cursor.execute('''SELECT t.id_trabajador, t.nombre,t.apellido 
                    FROM trabajador t
@@ -350,12 +365,12 @@ def agregartrabajador():
     existe=cursor.fetchone()
 
     cursor.execute('''SELECT COUNT(*) FROM curso WHERE id_curso=%s ''',(id_curso,))
-    existe=cursor.fetchone()
+    existecurso=cursor.fetchone()
 
     cursor.execute('''SELECT * FROM curso''')
     cursos=cursor.fetchall()
 
-    if existe[0]>0:
+    if existe[0]>0 and existecurso[0]>0:
 
         cursor.execute('''INSERT INTO curso_trabajador (id_curso,id_trabajador) VALUES (%s,%s)''',(id_curso,id_trabajador))
 

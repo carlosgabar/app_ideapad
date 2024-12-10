@@ -68,8 +68,10 @@
                     <th>ID</th>
                     <th>Nombre</th>
                     <th>Apellido</th>
+                    <th>Accion</th>
                 </tr>
-                <tbody>
+                <tbody>    {% for id, tema, ponente, inicio, fin, min, max, 
+                    descripcion, localidad, salon, estado in curso  %}
                     {%for id_trabajador,nombre,apellido in trabajadores %}
 
                     <td>
@@ -81,7 +83,13 @@
                     <td>
                         {{ apellido }}
                     </td>
+                    <td> 
+                        <form action="{{ url_for('eliminarid', id=id_trabajador,idcurso=id) }}" method="get" style="display:inline;">
+                          <button type="submit">Eliminar</button>
+                        </form>
+                    </td>
                 </tbody>
+                    {% endfor %}
                     {% endfor %}
             </thead>
         </table>
