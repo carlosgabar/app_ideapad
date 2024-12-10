@@ -27,25 +27,28 @@
 </head>
 <body>
 
-    <div class="barra-nav">
-        <nav class="navbar" style="background-color: #e3f2fd;">
-        <nav class="navbar navbar-expand navbar-light">
-            <ul class="nav navbar-nav ">
+  <div class="barra-nav">
+    <nav class="navbar navbar-expand navbar-light" style="background-color: #e3f2fd;">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav me-auto"> <!-- "me-auto" empuja el logo a la derecha -->
                 <li class="nav-item">
-                <a class="nav-link" href="/menu">Cursos</a>
+                    <a class="nav-link" href="/menu_admin">Cursos</a>
                 </li>
                 <li class="nav-item">
-                <a class="nav-link" href="/cerrar_admin">Cerrar Sesion</a>
+                    <a class="nav-link" href="/visualizar">Visualizar</a>
                 </li>
-                <div class="boton_admin">
+                <li class="nav-item">
+                    <a class="nav-link" href="/cerrar_admin">Cerrar Sesion</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/login_admin">Administrador</a>
-                </li>    
-                </div>
+                </li>
             </ul>
-        </nav>
-        </nav>
-    </div>
+            <img src="/static/img/logopequiven.png" class="logo" alt="Logo" style="height: 70px;"> <!-- Logo a la derecha -->
+        </div>
+    </nav>
+</div>
+
 
     <div class="container ">
 

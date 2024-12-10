@@ -1,16 +1,16 @@
-import psycopg2
-from psycopg2 import DatabaseError
+import psycopg
+from psycopg import DatabaseError
 
 def get_connection():
 
     try:
 
-        return psycopg2.connect(
+        return psycopg.connect(
             
             host="localhost",
             user="postgres",
             password="Yayel.2027",
-            database="app_flask"
+            dbname="app_flask"
 
         )
 

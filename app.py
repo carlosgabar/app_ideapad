@@ -352,9 +352,6 @@ def eventos():
     conectar=conectar_bd()
     cursor=conectar.cursor()
 
-    cursor.execute('''SELECT nombre,fecha_inicio,fecha_fin FROM curso WHERE status='activo' ''')
-    cursos=cursor.fetchall()
-
     cursor.execute('''SELECT c.nombre,c.fecha_inicio,STRING_AGG(t.descripcion,',')
                    FROM curso c
                    INNER JOIN tarea t ON c.id_curso=t.id_curso
@@ -362,22 +359,27 @@ def eventos():
                    GROUP BY c.nombre,c.fecha_inicio''')
     
     infocurso=cursor.fetchall()
-    print("LA INFO ES",infocurso[0][0])
+    print(infocurso)
+    lista_add_indice=[]
+    i=0
+    for tareas in infocurso:
+        lista_add_indice.append((*tareas,i))
+        i=i+1
 
-    tareas=infocurso[0][2]
-    lista_tareas=tareas.split(',')
-    print(lista_tareas)
-  
-    lista_cursos=[]
-    for curso in infocurso:
+    print(lista_add_indice)
+
+    lista_cursos = []
+    for curso in lista_add_indice:
+        title, start_date, tareas_str, indice = curso
+        tareas = tareas_str.split(',')
         lista_cursos.append({
+        'title': title,
+        'start': start_date.isoformat(),
+        'extendedProps': {
+            'tareas': [{'tarea': tarea} for tarea in tareas]
+        }
+    })
 
-            'title':curso[0],
-            'start':curso[1].isoformat(),
-            'extendedProps': {
-            'tareas': [{'tarea': tarea} for tarea in lista_tareas]
-        }})
-     
     conectar.commit()
     cursor.close()
     conectar.close()
