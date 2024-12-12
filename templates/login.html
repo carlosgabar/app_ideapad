@@ -4,15 +4,15 @@
  
     <div class="login-container">
         <h2 class="text-center">Iniciar sesión</h2>
-        <form id="loginadmin" action="/login_admin" method="post">
+        <form id="logintrabajador" action="/login_trabajador" method="post">
             {% if mensaje   %}
             <div class="alert alert-primary text-center" role="alert" >
                 <strong>{{mensaje}}</strong>
               </div>
             {%  endif  %}
             <div class="form-group">
-                <label for="Admin">Usuario:</label>
-                <input type="text" class="form-control" id="user" name="user" placeholder="Ingrese su usuario" required>
+                <label for="Admin">ID:</label>
+                <input type="number" class="form-control" id="user" name="user" placeholder="Ingrese su ID" required>
             </div>
             <div class="form-group">
                 <label for="password">Contraseña:</label>

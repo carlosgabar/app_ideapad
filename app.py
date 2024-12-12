@@ -39,6 +39,40 @@ def login():
 
     return render_template('login.html')
 
+@app.route('/login_trabajador',methods=['POST'])
+def login_trabajador():
+
+    id=request.form['user']
+    clave=request.form['password']
+
+    conectar=conectar_bd()
+    cursor=conectar.cursor()
+
+    cursor.execute(''' SELECT id_trabajador,clave FROM trabajador WHERE id_trabajador=%s and clave=%s''',(id,clave))
+   
+    if cursor.fetchone() is not None:
+        session["login"]=True
+        session["usuario"]="Trabajador"
+        return redirect(url_for("menutrabajador",id=id))
+
+    conectar.commit()
+    cursor.close()
+    conectar.close()
+
+    return render_template('login.html',mensaje="Acceso Denegado")
+
+@app.route('/trabajador/<int:id>', methods=['GET', 'POST'])
+def menutrabajador(id):
+
+    conectar=conectar_bd()
+    cursor=conectar.cursor()
+
+    conectar.commit()
+    cursor.close()
+    conectar.close()
+
+    return render_template('menu_trabajador.html')
+
 
 @app.route('/login_admin')
 def loginadmin():
@@ -115,7 +149,7 @@ def crear():
 
     documento   = request.files['documento']
     basepath = os.path.dirname (__file__) #La ruta donde se encuentra el archivo actual
-    filename = secure_filename(documento.filename) #Nombre original del archivo
+    filename = secure_filename(documento.filename) #Nombre original del archivoo
             
     extension           = os.path.splitext(filename)[1]
     print(extension)
