@@ -67,12 +67,19 @@ def menutrabajador(id):
     conectar=conectar_bd()
     cursor=conectar.cursor()
 
+    cursor.execute('''SELECT COUNT(*) FROM curso_trabajador tc 
+                   JOIN trabajador t on tc.id_trabajador=t.id_trabajador
+                   JOIN curso c on tc.id_curso=c.id_curso
+                   WHERE tc.status='activo' and tc.id_trabajador=%s ''',(id,))
+    
+    activos=cursor.fetchone()
+    print(activos)
+
     conectar.commit()
     cursor.close()
     conectar.close()
 
-    return render_template('menu_trabajador.html')
-
+    return render_template('menu_trabajador.html',activos=activos[0])
 
 @app.route('/login_admin')
 def loginadmin():
@@ -228,6 +235,8 @@ def editarid(id):
 
     cursor.execute('''SELECT * FROM  curso WHERE id_curso=%s ''' ,(id,))
     detalle=cursor.fetchone()
+    
+    print(detalle[2])
 
     cursor.execute('''SELECT * FROM curso''')
     cursos=cursor.fetchall()
